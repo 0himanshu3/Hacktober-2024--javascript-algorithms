@@ -1,8 +1,8 @@
 (function (exports) {
   'use strict';
 
-  function id (val) { return val; }
-  function get (key) { return function (val) { return val[key]; }; }
+  const id = (val) => val;
+  const get = (key) => (val) => val[key];
 
   /**
    * Searches for specific element in a given array using
@@ -19,16 +19,19 @@
    * @module searching/binarysearch
    * @param {Array} array Input array.
    * @param {Number} value Value of the element which index should be found.
+   * @param {String|Function} [key] Optional key to access object properties.
    * @returns {Number} Index of the element or -1 if not found.
    */
-  function binarySearch(array, value, key) {
+  const binarySearch = (array, value, key) => {
     key = !key ? id : typeof key === 'string' ? get(key) : key;
     value = key(value);
-    var middle = Math.floor(array.length / 2);
-    var left = 0;
-    var right = array.length;
+
+    let left = 0;
+    let right = array.length - 1;
+    let middle = Math.floor((left + right) / 2);
+
     while (right >= left) {
-      var middleValue = key(array[middle]);
+      const middleValue = key(array[middle]);
       if (middleValue === value) {
         return middle;
       } else if (middleValue > value) {
@@ -39,7 +42,7 @@
       middle = Math.floor((left + right) / 2);
     }
     return -1;
-  }
+  };
 
   exports.binarySearch = binarySearch;
 
